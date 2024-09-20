@@ -9,6 +9,8 @@ import { LuAlignLeft } from "react-icons/lu";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { links } from "@/utils/links";
+import { UserIcon } from "lucide-react";
+import { SignedOut, SignedIn } from "@clerk/nextjs";
 
 function LinksDropdown() {
   return (
@@ -16,18 +18,22 @@ function LinksDropdown() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex gap-4 max-w-[100px]">
           <LuAlignLeft className="w-6 h-6" />
+          <UserIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
-        {links.map((link) => {
-          return (
-            <DropdownMenuItem key={link.href}>
-              <Link href={link.href} className="capitalize w-full">
-                {link.label}
-              </Link>
-            </DropdownMenuItem>
-          );
-        })}
+        <SignedOut></SignedOut>
+        <SignedIn>
+          {links.map((link) => {
+            return (
+              <DropdownMenuItem key={link.href}>
+                <Link href={link.href} className="capitalize w-full">
+                  {link.label}
+                </Link>
+              </DropdownMenuItem>
+            );
+          })}
+        </SignedIn>
       </DropdownMenuContent>
     </DropdownMenu>
   );
