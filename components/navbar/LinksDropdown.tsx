@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { links } from "@/utils/links";
 import { UserIcon } from "lucide-react";
 import { SignedOut, SignedIn, SignInButton, SignUpButton } from "@clerk/nextjs";
+import SignOutLink from "./SignOutLink";
 
 function LinksDropdown() {
   return (
@@ -45,6 +46,10 @@ function LinksDropdown() {
               </DropdownMenuItem>
             );
           })}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <SignOutLink />
+          </DropdownMenuItem>
         </SignedIn>
       </DropdownMenuContent>
     </DropdownMenu>
