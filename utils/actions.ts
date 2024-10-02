@@ -4,7 +4,7 @@ import db from "@/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { imageSchema, productSchema, validateWithZodSchema } from "./schemas";
-import { uploadImage } from "./supabase";
+import { deleteImage, uploadImage } from "./supabase";
 import { revalidatePath } from "next/cache";
 
 const getAuthUser = async () => {
@@ -100,20 +100,42 @@ export const fetchAdminProducts = async () => {
 };
 
 export const deleteProductAction = async (
-  prevState: { productId: string },
+  prevState: { productId: string }
   // formData: FormData
 ) => {
   const { productId } = prevState;
   await getAdminUser();
   try {
-    await db.product.delete({
+    const product = await db.product.delete({
       where: {
         id: productId,
       },
     });
+    await deleteImage(product.image);
     revalidatePath("/admin/products");
     return { message: "product removed" };
   } catch (error) {
     return renderError(error);
   }
+};
+
+export const fetchAdminProductDetails = async (productId: string) => {
+  await getAdminUser();
+  const product = await db.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  if (!product) {
+    redirect("/admin/products");
+  }
+  return product;
+};
+
+export const updateProductAction = async (prevState, formData: FormData) => {
+  return { message: "Product updated successfully" };
+};
+
+export const updateProductImageAction = async (prevState, formData: FormData) => {
+  return { message: "Image updated successfully" };
 };
