@@ -133,9 +133,29 @@ export const fetchAdminProductDetails = async (productId: string) => {
 };
 
 export const updateProductAction = async (prevState, formData: FormData) => {
-  return { message: "Product updated successfully" };
+  await getAdminUser();
+  try {
+    const productId = formData.get("id") as string;
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(productSchema, rawData);
+    await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        ...validatedFields,
+      },
+    });
+    revalidatePath(`/admin/products/${productId}/edit`);
+    return { message: "Product updated successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
-export const updateProductImageAction = async (prevState, formData: FormData) => {
+export const updateProductImageAction = async (
+  prevState,
+  formData: FormData
+) => {
   return { message: "Image updated successfully" };
 };
