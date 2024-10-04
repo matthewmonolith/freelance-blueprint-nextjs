@@ -48,3 +48,5 @@ function ImageInputContainer(props: ImageInputContainerProps) {
   );
 }
 export default ImageInputContainer;
+
+//id and original url of image coming from props.children which are hidden inputs

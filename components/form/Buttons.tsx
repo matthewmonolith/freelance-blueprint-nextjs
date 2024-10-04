@@ -31,8 +31,7 @@ export function SubmitButton({
     >
       {pending ? (
         <>
-          {" "}
-          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> Submitting...{" "}
+          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> Submitting...
         </>
       ) : (
         <> {text} </>
@@ -45,7 +44,7 @@ type actionType = "edit" | "delete";
 
 export const IconButton = ({ actionType }: { actionType: actionType }) => {
   const { pending } = useFormStatus();
- 
+
   const renderIcon = () => {
     switch (actionType) {
       case "edit":
