@@ -1,7 +1,30 @@
-function FavouriteToggleForm() {
+"use client";
+
+import { usePathname } from "next/navigation";
+import FormContainer from "../form/FormContainer";
+import { toggleFavouriteAction } from "@/utils/actions";
+import { CardSubmitButton } from "../form/Buttons";
+
+type FavoriteToggleFormProps = {
+  productId: string;
+  favouriteId: string | null;
+};
+
+function FavouriteToggleForm({
+  productId,
+  favouriteId,
+}: FavoriteToggleFormProps) {
+  const pathname = usePathname();
+  const toggleAction = toggleFavouriteAction.bind(null, {
+    productId,
+    favouriteId,
+    pathname,
+  });
   return (
-    <div>FavouriteToggleForm</div>
-  )
+    <FormContainer action={toggleAction}>
+      <CardSubmitButton isFavourite={favouriteId ? true : false} />
+    </FormContainer>
+  );
 }
 
-export default FavouriteToggleForm
+export default FavouriteToggleForm;

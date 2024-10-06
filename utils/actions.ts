@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/utils/db";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { imageSchema, productSchema, validateWithZodSchema } from "./schemas";
 import { deleteImage, uploadImage } from "./supabase";
@@ -179,4 +179,48 @@ export const updateProductImageAction = async (
   } catch (error) {
     return renderError(error);
   }
+};
+
+export const toggleFavouriteAction = async (prevState: {
+  productId: string;
+  favouriteId: string | null;
+  pathname: string;
+}) => {
+  const user = await getAuthUser();
+  const { productId, favouriteId, pathname } = prevState;
+
+  try {
+    if (favouriteId) {
+      await db.favourite.delete({
+        where: {
+          id: favouriteId,
+        },
+      });
+    } else {
+      await db.favourite.create({
+        data: {
+          productId,
+          clerkId: user.id,
+        },
+      });
+    }
+  } catch (error) {
+    return renderError(error);
+  }
+  revalidatePath(pathname);
+  return { message: favouriteId ? "Removed from faves" : "Added to faves" };
+};
+
+export const fetchFavourite = async ({ productId }: { productId: string }) => {
+  const user = await getAuthUser();
+  const favourite = await db.favourite.findFirst({
+    where: {
+      productId,
+      clerkId: user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return favourite?.id || null;
 };
