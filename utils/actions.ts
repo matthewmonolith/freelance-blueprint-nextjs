@@ -224,3 +224,16 @@ export const fetchFavourite = async ({ productId }: { productId: string }) => {
   });
   return favourite?.id || null;
 };
+
+export const fetchUserFavourites = async () => {
+  const user = await getAuthUser();
+  const favourites = await db.favourite.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    include: {
+      product: true,
+    },
+  });
+  return favourites
+};

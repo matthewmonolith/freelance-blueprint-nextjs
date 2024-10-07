@@ -5,6 +5,7 @@ import { formatCurrencyGBP } from "@/utils/format";
 import FavouriteToggleButton from "@/components/products/FavouriteToggleButton";
 import AddToCart from "@/components/single-product/AddToCart";
 import ProductRating from "@/components/single-product/ProductRating";
+import ShareButton from "@/components/single-product/ShareButton";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingleProduct(params.id);
@@ -27,7 +28,10 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
         <div>
           <div className="flex gap-x-8 items-center">
             <h1 className="text-3xl font-bold">{name}</h1>
-            <FavouriteToggleButton productId={params.id} />
+            <div className="flex items-center gap-x-2">
+              <FavouriteToggleButton productId={params.id} />
+              <ShareButton name={product.name} productId={params.id}/>
+            </div>
           </div>
           <ProductRating productId={params.id} />
           <h4 className="text-xl mt-2">{company}</h4>
