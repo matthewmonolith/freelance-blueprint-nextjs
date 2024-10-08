@@ -6,6 +6,8 @@ import FavouriteToggleButton from "@/components/products/FavouriteToggleButton";
 import AddToCart from "@/components/single-product/AddToCart";
 import ProductRating from "@/components/single-product/ProductRating";
 import ShareButton from "@/components/single-product/ShareButton";
+import SubmitReview from "@/components/reviews/SubmitReview";
+import ProductReviews from "@/components/reviews/ProductReviews";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingleProduct(params.id);
@@ -30,7 +32,7 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
             <h1 className="text-3xl font-bold">{name}</h1>
             <div className="flex items-center gap-x-2">
               <FavouriteToggleButton productId={params.id} />
-              <ShareButton name={product.name} productId={params.id}/>
+              <ShareButton name={product.name} productId={params.id} />
             </div>
           </div>
           <ProductRating productId={params.id} />
@@ -42,6 +44,8 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
           <AddToCart productId={params.id} />
         </div>
       </div>
+      <ProductReviews productId={params.id} />
+      <SubmitReview productId={params.id} />
     </section>
   );
 }
