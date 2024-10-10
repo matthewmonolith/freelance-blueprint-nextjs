@@ -254,14 +254,24 @@ export const createReviewAction = async (prevState, formData: FormData) => {
         clerkId: user.id,
       },
     });
-    revalidatePath(`/products/${validateFields.productId}`)
+    revalidatePath(`/products/${validateFields.productId}`);
     return { message: "Review submitted successfully!" };
   } catch (error) {
     return renderError(error);
   }
 };
 
-export const fetchProductReviews = async () => {};
+export const fetchProductReviews = async (productId: string) => {
+  const reviews = await db.review.findMany({
+    where: {
+      productId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
+};
 
 export const fetchProductReviewsByUser = async () => {};
 
