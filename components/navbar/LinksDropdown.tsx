@@ -27,7 +27,6 @@ function LinksDropdown() {
   const isAdmin = userId === process.env.NEXT_PUBLIC_ADMIN_USER_ID;
 
   return (
-    <ClerkProvider dynamic>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex gap-4 max-w-[100px]">
@@ -67,7 +66,6 @@ function LinksDropdown() {
           </SignedIn>
         </DropdownMenuContent>
       </DropdownMenu>
-    </ClerkProvider>
   );
 }
 

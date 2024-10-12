@@ -15,16 +15,32 @@ async function ReviewsPage() {
       <SectionTitle text="Your reviews" />
       <section className="grid md:grid-cols-2 gap-8 mt-4">
         {reviews.map((review) => {
-          const {comment, rating} = review
-          const {name, image} = review.product
+          const { comment, rating } = review;
+          const { name, image } = review.product;
           const reviewInfo = {
-            comment, rating, name, image
-          }
-          return <ReviewCard key={review.id} reviewInfo={reviewInfo}></ReviewCard>
+            comment,
+            rating,
+            name,
+            image,
+          };
+          return (
+            <ReviewCard key={review.id} reviewInfo={reviewInfo}>
+              <DeleteReview reviewId={review.id} />
+            </ReviewCard>
+          );
         })}
       </section>
     </>
   );
 }
+
+const DeleteReview = ({ reviewId }: { reviewId: string }) => {
+  const deleteReview = deleteReviewAction.bind(null, reviewId);
+  return (
+    <FormContainer action={deleteReview}>
+      <IconButton actionType="delete" />
+    </FormContainer>
+  );
+};
 
 export default ReviewsPage;
