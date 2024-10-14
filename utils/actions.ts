@@ -331,4 +331,11 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   }
 };
 
-export const findExistingReview = async () => {};
+export const findExistingReview = async (userId: string, productId: string) => {
+  return db.review.findFirst({
+    where:{
+      clerkId: userId,
+      productId
+    }
+  })
+};
