@@ -103,3 +103,10 @@ export const CardSubmitButton = ({ isFavourite }: { isFavourite: boolean }) => {
     </Button>
   );
 };
+
+
+export const ProductSignInButton = () => {
+  return <SignInButton>
+    <Button type="button" className="mt-8">Sign in</Button>
+  </SignInButton>
+}

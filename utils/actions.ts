@@ -333,9 +333,38 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
 
 export const findExistingReview = async (userId: string, productId: string) => {
   return db.review.findFirst({
-    where:{
+    where: {
       clerkId: userId,
-      productId
-    }
-  })
+      productId,
+    },
+  });
 };
+
+export const fetchCartItems = async () => {
+  const { userId } = await auth();
+  const cart = await db.cart.findFirst({
+    where: {
+      clerkId: userId ?? "",
+    },
+    select: {
+      numItemsInCart: true,
+    },
+  });
+  return cart?.numItemsInCart ?? 0;
+};
+
+const fetchProduct = async () => {};
+
+export const fetchOrCreateCart = async () => {};
+
+const updateOrCreateCartItem = async () => {};
+
+export const updateCart = async () => {};
+
+export const addToCartAction = async (prevState, formData: FormData) => {
+  return { message: "Product added to the cart" };
+};
+
+export const removeCartItemAction = async () => {};
+
+export const updateCartItemAction = async () => {};
