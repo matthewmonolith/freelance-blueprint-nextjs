@@ -490,3 +490,7 @@ export const removeCartItemAction = async () => {
 export const updateCartItemAction = async () => {
   //has to have cart model
 };
+
+export const createOrderAction = async (prevState, formData: FormData) => {
+  return { message: "Ordered created" };
+};
