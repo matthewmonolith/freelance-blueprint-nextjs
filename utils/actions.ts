@@ -387,9 +387,11 @@ export const fetchOrCreateCart = async ({
     },
     include: includeProductClause,
   });
+
   if (!cart && errorOnFailure) {
-    throw new Error("cart not found");
+    throw new Error("Cart not found");
   }
+
   if (!cart) {
     cart = await db.cart.create({
       data: {
@@ -398,6 +400,7 @@ export const fetchOrCreateCart = async ({
       include: includeProductClause,
     });
   }
+
   return cart;
 };
 
@@ -416,6 +419,7 @@ const updateOrCreateCartItem = async ({
       cartId,
     },
   });
+
   if (cartItem) {
     cartItem = await db.cartItem.update({
       where: {
@@ -438,11 +442,16 @@ export const updateCart = async (cart: Cart) => {
       cartId: cart.id,
     },
     include: {
-      product: true,
+      product: true, // Include the related product
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
+
   let numItemsInCart = 0;
   let cartTotal = 0;
+
   for (const item of cartItems) {
     numItemsInCart += item.amount;
     cartTotal += item.amount * item.product.price;
@@ -455,6 +464,7 @@ export const updateCart = async (cart: Cart) => {
     where: {
       id: cart.id,
     },
+
     data: {
       numItemsInCart,
       cartTotal,
@@ -463,7 +473,7 @@ export const updateCart = async (cart: Cart) => {
     },
     include: includeProductClause,
   });
-  return currentCart;
+  return { currentCart, cartItems };
 };
 
 export const addToCartAction = async (prevState, formData: FormData) => {
@@ -483,14 +493,124 @@ export const addToCartAction = async (prevState, formData: FormData) => {
   redirect("/cart");
 };
 
-export const removeCartItemAction = async () => {
-  //has to have cart model
+export const removeCartItemAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
+  try {
+    const cartItemId = formData.get("id") as string;
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    });
+    await db.cartItem.delete({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+    });
+
+    await updateCart(cart);
+    revalidatePath("/cart");
+    return { message: "Item removed from cart" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
-export const updateCartItemAction = async () => {
-  //has to have cart model
+export const updateCartItemAction = async ({
+  amount,
+  cartItemId,
+}: {
+  amount: number;
+  cartItemId: string;
+}) => {
+  const user = await getAuthUser();
+
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    });
+    await db.cartItem.update({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+      data: {
+        amount,
+      },
+    });
+    await updateCart(cart);
+    revalidatePath("/cart");
+    return { message: "cart updated" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
 export const createOrderAction = async (prevState, formData: FormData) => {
-  return { message: "Ordered created" };
+  const user = await getAuthUser();
+  let orderId: null | string = null;
+  let cartId: null | string = null;
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    });
+    cartId = cart.id;
+
+    //need to remove all orders where isPaid == false, once added payment getaway, user able to abandon the cart, but still create the order, stop lots of instances where isPaid is false, before create new order we delete all the unpaid ones
+    await db.order.deleteMany({
+      where: {
+        clerkId: user.id,
+        isPaid: false,
+      },
+    });
+
+    //will only access order when isPaid = true/payment made
+
+    const order = await db.order.create({
+      data: {
+        clerkId: user.id,
+        products: cart.numItemsInCart,
+        orderTotal: cart.orderTotal,
+        tax: cart.tax,
+        shipping: cart.shipping,
+        email: user.emailAddresses[0].emailAddress,
+      },
+    });
+    orderId = order.id;
+  } catch (error) {
+    return renderError(error);
+  }
+  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+};
+
+export const fetchUserOrders = async () => {
+  const user = await getAuthUser();
+  const orders = await db.order.findMany({
+    where: {
+      clerkId: user.id,
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return orders;
+};
+
+export const fetchAdminOrders = async () => {
+  await getAdminUser();
+  const orders = await db.order.findMany({
+    where: {
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return orders;
 };
