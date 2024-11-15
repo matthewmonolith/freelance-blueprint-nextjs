@@ -582,10 +582,23 @@ export const createOrderAction = async (prevState, formData: FormData) => {
       },
     });
     orderId = order.id;
+    await db.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        isPaid: true,
+      },
+    });
+    await db.cart.delete({
+      where: {
+        id: cartId,
+      },
+    });
   } catch (error) {
     return renderError(error);
   }
-  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+  redirect(`/orders`);
 };
 
 export const fetchUserOrders = async () => {
