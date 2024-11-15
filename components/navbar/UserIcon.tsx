@@ -1,4 +1,4 @@
-import { LuUser2 } from "react-icons/lu";
+import { LuUser } from "react-icons/lu";
 import { currentUser } from "@clerk/nextjs/server";
 
 async function UserIcon() {
@@ -10,7 +10,7 @@ async function UserIcon() {
     return <img src={profileImage} alt="profile picture" className="w-6 h-6 rounded-full object-cover"/>
   }
 
-  return <LuUser2 className="w-6 h-6 bg-primary rounded-full text-white"/>
+  return <LuUser className="w-6 h-6 bg-primary rounded-full text-white"/>
 }
 
 export default UserIcon;

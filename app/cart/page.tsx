@@ -9,7 +9,7 @@ async function CartPage() {
   const { userId } = await auth();
   if (!userId) redirect("/");
   const previousCart = await fetchOrCreateCart({ userId });
-  const {currentCart, cartItems} = await updateCart(previousCart);
+  const {currentCart} = await updateCart(previousCart);
   if (currentCart.numItemsInCart === 0) return <SectionTitle text="Empty Cart" />;
 
   return (

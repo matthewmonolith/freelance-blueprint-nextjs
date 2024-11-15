@@ -3,11 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const FirstColumn = ({
-  name,
   image,
 }: {
   image: string;
-  name: string;
 }) => {
   return (
     <div className="relative h-24 w-24 sm:h-32 sm:w-32">
