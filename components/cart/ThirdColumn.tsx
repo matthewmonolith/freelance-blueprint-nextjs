@@ -9,18 +9,13 @@ import { useToast } from "@/hooks/use-toast";
 
 function ThirdColumn({ quantity, id }: { quantity: number; id: string }) {
   const [amount, setAmount] = useState(quantity);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
   const handleAmountChange = async (value: number) => {
-    setIsLoading(true);
     toast({ description: "Calculating..." });
-    const result = await updateCartItemAction({
-      amount: value,
-      cartItemId: id,
-    });
+    const result = await updateCartItemAction({ amount: value, cartItemId: id });
     setAmount(value);
-    toast({description: result.message})
-    setIsLoading(false)
+    toast({ description: result.message });
   };
 
   return (
@@ -38,4 +33,5 @@ function ThirdColumn({ quantity, id }: { quantity: number; id: string }) {
     </div>
   );
 }
+
 export default ThirdColumn;
