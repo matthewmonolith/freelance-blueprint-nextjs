@@ -11,51 +11,38 @@ import { SubmitButton } from "@/components/form/Buttons";
 import CheckboxInput from "@/components/form/CheckboxInput";
 import ImageInputContainer from "@/components/form/ImageInputContainer";
 
-async function EditProductPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+interface EditProductPageProps {
+  params: { id: string };
+}
+
+async function EditProductPage({ params }: EditProductPageProps) {
+  const { id } = params;
   const product = await fetchAdminProductDetails(id);
-  const { name, company, description, featured, price } = product;
+  const { name, company, description, featured, price, image } = product;
+
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">update product</h1>
+      <h1 className="text-2xl font-semibold mb-8 capitalize">Update Product</h1>
       <div className="border p-8 rounded">
         <ImageInputContainer
           action={updateProductImageAction}
           name={name}
-          image={product.image}
+          image={image}
           text="update image"
         >
           <input type="hidden" name="id" value={id} />
-          <input type="hidden" name="url" value={product.image} />
+          <input type="hidden" name="url" value={image} />
         </ImageInputContainer>
         <FormContainer action={updateProductAction}>
-          {/* read you can pass id in a hidden input rather than use binding */}
           <div className="grid gap-4 md:grid-cols-2 my-4">
             <input type="hidden" name="id" value={id} />
-            <FormInput
-              type="text"
-              name="name"
-              label="product name"
-              defaultValue={name}
-            />
+            <FormInput type="text" name="name" label="product name" defaultValue={name} />
             <FormInput type="text" name="company" defaultValue={company} />
             <PriceInput defaultValue={price} />
           </div>
-          <TextAreaInput
-            name="description"
-            labelText="product description"
-            defaultValue={description}
-          />
+          <TextAreaInput name="description" labelText="product description" defaultValue={description} />
           <div className="mt-6">
-            <CheckboxInput
-              name="featured"
-              label="featured"
-              defaultChecked={featured}
-            />
+            <CheckboxInput name="featured" label="featured" defaultChecked={featured} />
           </div>
           <SubmitButton text="update product" className="mt-8" />
         </FormContainer>
@@ -63,4 +50,5 @@ async function EditProductPage({
     </section>
   );
 }
+
 export default EditProductPage;
