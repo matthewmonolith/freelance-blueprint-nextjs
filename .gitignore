@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
+
 
 # debug
 npm-debug.log*
@@ -40,4 +42,22 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+#test
 t.tsx
+
+
+# Cypress auto-generated files
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Node modules
+node_modules/
+
+# Cypress cache
+.cypress_cache/
+.cache/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
