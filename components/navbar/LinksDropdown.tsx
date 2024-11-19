@@ -17,7 +17,7 @@ function LinksDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' className='flex gap-4 max-w-[100px]'>
+        <Button data-test="links-dropdown-button" variant='outline' className='flex gap-4 max-w-[100px]'>
           <LuAlignLeft className='w-6 h-6' />
           <UserIcon />
         </Button>
@@ -26,7 +26,7 @@ function LinksDropdown() {
         <SignedOut>
           <DropdownMenuItem>
             <SignInButton mode='modal'>
-              <button className='w-full text-left'>Login</button>
+              <button data-test="clerk-login-button" className='w-full text-left'>Login</button>
             </SignInButton>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
