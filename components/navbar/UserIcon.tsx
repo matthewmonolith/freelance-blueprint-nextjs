@@ -7,7 +7,7 @@ async function UserIcon() {
   const profileImage = user?.imageUrl;
 
   if(profileImage){
-    return <img src={profileImage} alt="profile picture" className="w-6 h-6 rounded-full object-cover"/>
+    return <img data-test='user-icon' src={profileImage} alt="profile picture" className="w-6 h-6 rounded-full object-cover"/>
   }
 
   return <LuUser className="w-6 h-6 bg-primary rounded-full text-white"/>
