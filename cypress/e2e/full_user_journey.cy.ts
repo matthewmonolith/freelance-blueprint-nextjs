@@ -23,6 +23,7 @@ describe("Full user journey, from sign-in to checkout (non-admin user)", () => {
     });
     cy.visit("http://localhost:3000/");
   });
+
   context("Links dropdown component", () => {
     it("Should show correct links after sign in", () => {
       cy.getByData("links-dropdown-button").click();
@@ -35,6 +36,12 @@ describe("Full user journey, from sign-in to checkout (non-admin user)", () => {
           link.label
         );
       });
+      cy.get("body").click();
+      cy.getByData("links-dropdown-menu").should("not.exist");
     });
   });
+
+  context("Home page should load featured products", () => {
+    
+  })
 });

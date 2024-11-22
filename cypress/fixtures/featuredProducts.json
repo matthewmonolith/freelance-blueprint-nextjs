@@ -1,0 +1,15 @@
+{
+    "Products":[
+        {
+            "clerkId":"123ABC",
+            "company":"Cushty Coats",
+            "createdAt":"Sun Dec 08 2024 15:32:27 GMT+0000 (Greenwich Mean Time)",
+            "description":"SIGNED racing jacket from 1999",
+            "featured": true,
+            "id":"987XYZ",
+            "image":"",
+            "name": "Vintage Racing Jacket",
+            "price": 50
+        }
+    ]
+}
