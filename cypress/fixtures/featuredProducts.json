@@ -7,9 +7,20 @@
             "description":"SIGNED racing jacket from 1999",
             "featured": true,
             "id":"987XYZ",
-            "image":"",
+            "image":"images/racing-jacket.jpg",
             "name": "Vintage Racing Jacket",
             "price": 50
+        },
+        {
+            "clerkId":"ABC123",
+            "company":"Cushty Coats",
+            "createdAt":"Sun Dec 08 2024 15:42:27 GMT+0000 (Greenwich Mean Time)",
+            "description":"Vintage bomber jacket from 1990",
+            "featured": true,
+            "id":"XYZ987",
+            "image":"images/vintage-jacket.jpg",
+            "name": "Bomber Jacket",
+            "price": 45
         }
     ]
 }

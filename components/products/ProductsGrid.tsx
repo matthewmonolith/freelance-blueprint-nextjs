@@ -7,13 +7,13 @@ import FavouriteToggleButton from "./FavouriteToggleButton";
 
 function ProductsGrid({ products }: { products: Product[] }) {
   return (
-    <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-test="product-grid">
       {products.map((product) => {
         const { name, price, image } = product;
         const productId = product.id;
         const gbpAmount = formatCurrencyGBP(price);
         return (
-          <article key={product.id} className="group relative">
+          <article key={product.id} className="group relative" data-test="product">
             <Link href={`/products/${productId}`}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="p-4">
@@ -28,13 +28,13 @@ function ProductsGrid({ products }: { products: Product[] }) {
                     />
                   </div>
                   <div className="mt-4 text-center">
-                    <h2 className="text-lg capitalize">{name}</h2>
-                    <p className="text-muted-foreground mt-1">{gbpAmount}</p>
+                    <h2 className="text-lg capitalize" data-test="product-name">{name}</h2>
+                    <p className="text-muted-foreground mt-1" data-test="product-amount">{gbpAmount}</p>
                   </div>
                 </CardContent>
               </Card>
             </Link>
-            <div className="absolute top-7 right-7 z-5">
+            <div className="absolute top-7 right-7 z-5" data-test="product-favourite-button">
               <FavouriteToggleButton productId={productId} />
             </div>
           </article>
