@@ -46,19 +46,72 @@ describe("Full user journey, from sign-in to checkout (non-admin user)", () => {
   });
 
   context("Home page should load featured products", () => {
-    it("featured products grid", () => {
+    it("loads the featured product grid", () => {
       cy.getByData("product-grid").within(() => {
-        cy.getByData("product").should("have.length.greaterThan", 0);
-        cy.getByData("product")
-          .eq(0)
+        cy.getByData("product-grid-item").should("have.length.greaterThan", 0);
+      });
+    });
+
+    it("renders the first product correctly", () => {
+      cy.getByData("product-grid-item")
+        .first()
+        .within(() => {
+          cy.get("a").should("have.attr", "href").and("match", supabaseId);
+          cy.get("img").should("have.attr", "src").and("include", "supabase");
+          cy.getByData("product-name").invoke("text").should("not.be.empty");
+          cy.getByData("product-amount")
+            .invoke("text")
+            .should("match", /^£\d+(\.\d{1,2})?$/);
+          cy.getByData("product-favourite-button").should("exist");
+        });
+    });
+  });
+
+  context("Product search", () => {
+    beforeEach(() => {
+      cy.getByData("product-search").as("search");
+    });
+
+    it("User types into a blank input and sees search results", () => {
+      cy.get("@search").invoke("val").should("be.empty");
+      cy.get("@search").click().type("band").wait(1500);
+      cy.url().should("include", "/products?search=band");
+      cy.getByData("product-container-heading").contains("1 product");
+      cy.getByData("product-grid").within(() => {
+        cy.getByData("product-grid-item").should("have.length.greaterThan", 0);
+      });
+    });
+
+    it("User switches to list view", () => {
+      cy.visit("/products?search=band");
+      cy.getByData("product-container-button").click();
+      cy.url().should("include", "/products?layout=list&search=band");
+      cy.getByData("product-list").within(() => {
+        cy.getByData("product-list-item").should("have.length.greaterThan", 0);
+      });
+    });
+
+    it("User toggles favourite button", () => {
+      cy.visit("/products?layout=list&search=band");
+      cy.getByData("product-list").within(() => {
+        cy.getByData("product-list-item")
+          .first()
           .within(() => {
-            cy.get("a").should("have.attr", "href").and("match", supabaseId); //link to product with id working
-            cy.get('img').should("have.attr", 'src').and('include', 'supabase') //image for product is a long string, but we can determine it comes from Supabase
-            cy.getByData('product-name').invoke('text').should('not.be.empty')
-            cy.getByData('product-amount').invoke('text').should('match', /^£\d+(\.\d{1,2})?$/) //ensure our gbpAmount util works
-            cy.getByData('product-favourite-button').should('exist')
+            cy.getByData("product-favourite-button").click();
           });
       });
+      cy.getByData("toast");
+      cy.getByData("toast-description");
+    });
+  });
+
+  context("product added to the cart", () => {
+    it("product page, add to cart", () => {
+      cy.visit("/products?layout=list&search=band");
+      cy.getByData("product-list-item").click();
+      cy.location("pathname").should("match", supabaseId);
+      cy.getByData('add-cart-button').click()
+      cy.url().contains('/cart')
     });
   });
 });

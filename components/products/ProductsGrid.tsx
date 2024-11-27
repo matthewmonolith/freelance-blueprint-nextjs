@@ -13,7 +13,7 @@ function ProductsGrid({ products }: { products: Product[] }) {
         const productId = product.id;
         const gbpAmount = formatCurrencyGBP(price);
         return (
-          <article key={product.id} className="group relative" data-test="product">
+          <article key={product.id} className="group relative" data-test="product-grid-item">
             <Link href={`/products/${productId}`}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="p-4">

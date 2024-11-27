@@ -35,6 +35,7 @@ function NavSearch() {
         handleSearch(e.target.value);
       }}
       value={search}
+      data-test='product-search'
     />
   );
 }

@@ -20,7 +20,7 @@ const ToastViewport = React.forwardRef<
       className
     )}
     {...props}
-  />
+  data-test="toast"/>
 ))
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
@@ -108,7 +108,7 @@ const ToastDescription = React.forwardRef<
     ref={ref}
     className={cn("text-sm opacity-90", className)}
     {...props}
-  />
+  data-test="toast-description"/>
 ))
 ToastDescription.displayName = ToastPrimitives.Description.displayName
 

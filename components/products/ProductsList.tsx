@@ -6,13 +6,13 @@ import Image from 'next/image';
 import FavouriteToggleButton from './FavouriteToggleButton';
 function ProductsList({ products }: { products: Product[] }) {
   return (
-    <div className='mt-12 grid gap-y-8'>
+    <div className='mt-12 grid gap-y-8' data-test="product-list">
       {products.map((product) => {
         const { name, price, image, company } = product;
         const dollarsAmount = formatCurrencyGBP(price);
         const productId = product.id;
         return (
-          <article key={productId} className='group relative'>
+          <article key={productId} className='group relative' data-test="product-list-item">
             <Link href={`/products/${productId}`}>
               <Card className='transform group-hover:shadow-xl transition-shadow duration-500'>
                 <CardContent className='p-8 gap-y-4 grid md:grid-cols-3'>
@@ -37,7 +37,7 @@ function ProductsList({ products }: { products: Product[] }) {
                 </CardContent>
               </Card>
             </Link>
-            <div className='absolute bottom-8 right-8 z-5'>
+            <div className='absolute bottom-8 right-8 z-5' data-test="product-favourite-button">
               <FavouriteToggleButton productId={productId} />
             </div>
           </article>

@@ -21,7 +21,7 @@ async function ProductsContainer({
       {/* HEADER */}
       <section>
         <div className='flex justify-between items-center'>
-          <h4 className='font-medium text-lg'>
+          <h4 className='font-medium text-lg' data-test="product-container-heading">
             {totalProducts} product{totalProducts > 1 && 's'}
           </h4>
           <div className='flex gap-x-4'>
@@ -29,6 +29,7 @@ async function ProductsContainer({
               variant={layout === 'grid' ? 'default' : 'ghost'}
               size='icon'
               asChild
+              data-test="product-grid-button"
             >
               <Link href={`/products?layout=grid${searchTerm}`}>
                 <LuLayoutGrid />
@@ -38,6 +39,7 @@ async function ProductsContainer({
               variant={layout === 'list' ? 'default' : 'ghost'}
               size='icon'
               asChild
+              data-test="product-container-button"
             >
               <Link href={`/products?layout=list${searchTerm}`}>
                 <LuList />
