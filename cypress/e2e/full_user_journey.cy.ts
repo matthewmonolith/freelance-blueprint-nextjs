@@ -106,12 +106,26 @@ describe("Full user journey, from sign-in to checkout (non-admin user)", () => {
   });
 
   context("product added to the cart", () => {
-    it("product page, add to cart", () => {
+    it.only("product page, add to cart", () => {
       cy.visit("/products?layout=list&search=band");
       cy.getByData("product-list-item").click();
       cy.location("pathname").should("match", supabaseId);
-      cy.getByData('add-cart-button').click()
-      cy.url().contains('/cart')
+      cy.getByData("add-cart-button").click();
+      cy.url().should("include", "/cart");
+      cy.getByData("cart-item").find("div").as("cols");
+      cy.get("@cols")
+        .eq(0)
+        .find("img")
+        .should("have.attr", "src")
+        .and("include", "supabase");
+      cy.get("@cols")
+        .eq(1)
+        .find("a")
+        .should("have.attr", "href")
+        .and("match", supabaseId);
+      cy.get("@cols").eq(1).find("h3").contains("Band Shirt");
+      cy.get("@cols").eq(1).find("h4").contains("Mills - Koelpin");
+      cy.getByData("select-cart-amount").click()
     });
   });
 });

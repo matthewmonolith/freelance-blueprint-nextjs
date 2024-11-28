@@ -16,6 +16,7 @@ function CartItemsList({ cartItems }: { cartItems: CartItemWithProduct[] }) {
           <Card
             key={id}
             className="flex flex-col gap-y-4 md:flex-row flex-wrap p-6 mb-8 gap-x-4"
+            data-test='cart-item'
           >
             <FirstColumn image={image} name={name} />
             <SecondColumn name={name} company={company} productId={productId} />

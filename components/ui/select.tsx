@@ -23,6 +23,7 @@ const SelectTrigger = React.forwardRef<
       className
     )}
     {...props}
+    data-test="select-cart-amount"
   >
     {children}
     <SelectPrimitive.Icon asChild>
