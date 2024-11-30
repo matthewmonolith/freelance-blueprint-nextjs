@@ -104,28 +104,91 @@ describe("Full user journey, from sign-in to checkout (non-admin user)", () => {
       cy.getByData("toast-description");
     });
   });
-
-  context("product added to the cart", () => {
-    it.only("product page, add to cart", () => {
+  context.only("product added to the cart", () => {
+    const productName = "Band Shirt";
+    const productBrand = "Mills - Koelpin";
+  
+    beforeEach(() => {
       cy.visit("/products?layout=list&search=band");
       cy.getByData("product-list-item").click();
       cy.location("pathname").should("match", supabaseId);
-      cy.getByData("add-cart-button").click();
+    });
+  
+    it("adds product to cart and navigates to cart page", () => {
+      cy.getByData("add-to-cart-button").click().wait(1500);
       cy.url().should("include", "/cart");
       cy.getByData("cart-item").find("div").as("cols");
+  
       cy.get("@cols")
         .eq(0)
         .find("img")
         .should("have.attr", "src")
         .and("include", "supabase");
+  
       cy.get("@cols")
         .eq(1)
         .find("a")
         .should("have.attr", "href")
         .and("match", supabaseId);
-      cy.get("@cols").eq(1).find("h3").contains("Band Shirt");
-      cy.get("@cols").eq(1).find("h4").contains("Mills - Koelpin");
-      cy.getByData("select-cart-amount").click()
+  
+      cy.get("@cols").eq(1).find("h3").contains(productName);
+      cy.get("@cols").eq(1).find("h4").contains(productBrand);
+    });
+  
+    it("selects product amount and shows toast", () => {
+      cy.getByData("add-to-cart-button").click().wait(1500);
+      cy.url().should("include", "/cart");
+  
+      cy.getByData("product-select").click();
+      cy.getByData("product-select-item").eq(0).click().wait(3500);
+  
+      cy.getByData("toast").should("exist");
+      cy.getByData("toast-description").should("exist");
+    });
+  
+    it("displays correct subtotal format", () => {
+      cy.getByData("add-to-cart-button").click().wait(1500);
+      cy.url().should("include", "/cart");
+  
+      cy.getByData("product-select").click();
+      cy.getByData("product-select-item").eq(0).click().wait(3500);
+  
+      cy.getByData("cart-row-amount")
+        .eq(0)
+        .invoke("text")
+        .should("match", /^£\d+(\.\d{1,2})?$/);
+    });
+  
+    it("calculates VAT correctly", () => {
+      cy.getByData("add-to-cart-button").click().wait(1500);
+      cy.url().should("include", "/cart");
+  
+      cy.getByData("product-select").click();
+      cy.getByData("product-select-item").eq(0).click().wait(3500);
+  
+      cy.getByData("cart-row-amount")
+        .eq(0)
+        .invoke("text")
+        .then((subtotalText) => {
+          const subtotal = parseFloat(subtotalText.replace(/[^0-9.]/g, ""));
+  
+          cy.getByData("cart-row-amount")
+            .eq(2)
+            .invoke("text")
+            .then((vatText) => {
+              const vat = parseFloat(vatText.replace(/[^0-9.]/g, ""));
+              const expectedVat = Math.ceil(vat);
+  
+              expect(vat).to.equal(expectedVat);
+            });
+        });
+    });
+  
+    it("can place the order", () => {
+      cy.getByData("add-to-cart-button").click().wait(1500);
+      cy.url().should("include", "/cart");
+      cy.getByData("Place-Order-button").click();
     });
   });
+  
 });

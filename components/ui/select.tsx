@@ -23,7 +23,7 @@ const SelectTrigger = React.forwardRef<
       className
     )}
     {...props}
-    data-test="select-cart-amount"
+    data-test="product-select"
   >
     {children}
     <SelectPrimitive.Icon asChild>
@@ -123,6 +123,7 @@ const SelectItem = React.forwardRef<
       className
     )}
     {...props}
+    data-test="product-select-item"
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>

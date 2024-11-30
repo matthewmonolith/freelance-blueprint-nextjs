@@ -28,7 +28,7 @@ export function SubmitButton({
       disabled={pending}
       className={cn("capitalize", className)}
       size={size}
-      data-test="add-cart-button"
+      data-test={`${text.split(' ').join('-')}-button`}
     >
       {pending ? (
         <>
