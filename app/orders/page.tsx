@@ -19,7 +19,9 @@ async function OrdersPage() {
     <>
       <SectionTitle text="Your Orders" />
       <Table>
-        <TableCaption>Total Orders:{orders.length}</TableCaption>
+        <TableCaption>
+          <div data-test="total-orders">Total Orders:{orders.length}</div>
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Products</TableHead>
